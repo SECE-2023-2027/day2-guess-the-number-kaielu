@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess My Number</title>
+  <style>
+   * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #e0f7fa;
+  color: #004d40;
+  text-align: center;
+  padding: 40px;
+}
+
+header {
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-size: 3.5rem;
+  color: #00695c;
+  margin-bottom: 10px;
+}
+
+.between {
+  font-size: 1.2rem;
+  color: #00796b;
+}
+
+.number {
+  font-size: 5rem;
+  width: 150px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #00695c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+section.left, section.right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+input.guess {
+  width: 80px;
+  padding: 12px;
+  font-size: 1.2rem;
+  text-align: center;
+  border: 2px solid #00acc1;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #004d40;
+}
+
+.btn {
+  padding: 12px 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  background-color: #00bcd4;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #008ba3;
+}
+
+.btn.again {
+  background-color: #ffca28;
+  color: #004d40;
+}
+
+.btn.again:hover {
+  background-color: #fbc02d;
+}
+
+.label-score, .label-highscore {
+  font-size: 1.3rem;
+}
+
+.message {
+  font-size: 1.4rem;
+  color: #004d40;
+  font-weight: bold;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Guess My Number</h1>
+    <p class="between">(Between 1 and 20)</p>
+    <button class="btn again">Again</button>
+    <div class="number">?</div>
+  </header>
+
+  <main>
+    <section class="left">
+      <input type="number" class="guess" />
+      <button class="btn check">Check</button>
+    </section>
+
+    <section class="right">
+      <p class="message">Start Guessing ...</p>
+      <p class="label-score"> Score: <span class="score">10</span></p>
+      <p class="label-highscore"> Highscore: <span class="highscore">0</span></p>
+    </section>
+  </main>
+
+  <script>
+    let secretNumber = Math.floor(Math.random() * 20) + 1;
+    let score = 20;
+    let highscore = 0;
+
+    const displayMessage = function (message) {
+      document.querySelector('.message').textContent = message;
+    };
+
+    document.querySelector('.check').addEventListener('click', function () {
+      const guess = Number(document.querySelector('.guess').value);
+
+      if (!guess) {
+        displayMessage('No number!');
+      } else if (guess === secretNumber) {
+        displayMessage('Correct Number!');
+        document.querySelector('.number').textContent = secretNumber;
+        document.body.style.backgroundColor = '#60b347';
+        if (score > highscore) {
+          highscore = score;
+          document.querySelector('.highscore').textContent = highscore;
+        }
+      } else if (guess !== secretNumber) {
+        if (score > 1) {
+          displayMessage(guess > secretNumber ? '📈 Too high!' : '📉 Too low!');
+          score--;
+          document.querySelector('.score').textContent = score;
+        } else {
+          displayMessage(' You lost the game!');
+          document.querySelector('.score').textContent = 0;
+        }
+      }
+    });
+
+    document.querySelector('.again').addEventListener('click', function () {
+      score = 20;
+      secretNumber = Math.floor(Math.random() * 20) + 1;
+
+      displayMessage('Start Guessing ...');
+      document.querySelector('.score').textContent = score;
+      document.querySelector('.number').textContent = '?';
+      document.querySelector('.guess').value = '';
+      document.body.style.backgroundColor = '#222';
+    });
+  </script>
+</body>
+</html>
